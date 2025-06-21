@@ -34,7 +34,7 @@ vllm:
 # API endpoint configuration
 api-endpoint:
   api_base: "https://generativelanguage.googleapis.com/v1beta/openai/" # Optional base URL for API endpoint (null for default API)
-  api_key: "AIzaSyBR6iL-s5h_OhMe3wHLWAWhsZ8AxOzTLzk"               # API key for API endpoint or compatible service (can use env var instead)
+  api_key: "GEMINI_KEY"               # API key for API endpoint or compatible service (can use env var instead)
   model: "gemini-2.0-flash" # Default model to use
   max_retries: 3                       # Number of retries for API calls
   retry_delay: 1.0                     # Initial delay between retries (seconds)
