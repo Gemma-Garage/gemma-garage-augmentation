@@ -72,7 +72,7 @@ async def augment_data(request: AugmentationRequest):
     bucket_name = bucket_uri.replace("gs://", "")
 
     temp_dir = "temp_processing"
-    output_dir = get_path_config(ctx.config).get("output_dir", "output")
+    output_dir = "output"
     
     os.makedirs(temp_dir, exist_ok=True)
     os.makedirs(output_dir, exist_ok=True)
