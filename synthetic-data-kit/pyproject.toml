@@ -1,0 +1,87 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "synthetic-data-kit"
+version = "0.0.4b2"
+description = "Tool for generating high quality Synthetic datasets"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+dependencies = [
+    "datasets>=2.14.0",
+    "pdfminer-six>=20221105",
+    "pydantic>=2.4.0",
+    "python-docx>=0.8.11",
+    "python-pptx>=0.6.21",
+    "pytube>=15.0.0",
+    "pyyaml>=6.0",
+    "requests>=2.31.0",
+    "rich>=13.4.2",
+    "typer>=0.9.0",
+    "openai>=1.0.0",
+    "flask>=2.0.0",
+    "flask-wtf>=1.0.0",
+    "bootstrap-flask>=2.2.0",
+]
+
+# These fields appear in pip show
+summary = "Create and curate synthetic datasets for fine-tuning LLMs"
+authors = [
+    {name = "Sanyam Bhutani", email = "sanyambhutani@meta.com"},
+    {name = "Hamid Shojanazeri", email = "hamidnazeri@meta.com"},
+]
+maintainers = [
+    {name = "Sanyam Bhutani", email = "sanyambhutani@meta.com"},
+    {name = "Hamid Shojanazeri", email = "hamidnazeri@meta.com"},
+]
+keywords = ["llm", "synthetic-data", "fine-tuning", "llama", "ai", "machine-learning", "nlp", "dataset-generation", "chain-of-thought", "tool-use", "reasoning"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "Topic :: Text Processing :: Linguistic",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Natural Language :: English",
+]
+
+
+[project.urls]
+"Homepage" = "https://github.com/meta-llama/synthetic-data-kit"
+"Bug Tracker" = "https://github.com/meta-llama/synthetic-data-kit/issues"
+"Documentation" = "https://github.com/meta-llama/synthetic-data-kit#readme"
+"Getting Started" = "https://github.com/meta-llama/synthetic-data-kit/blob/main/getting-started/README.md"
+
+[project.scripts]
+synthetic-data-kit = "synthetic_data_kit.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["synthetic_data_kit"]
+include-package-data = true
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "synthetic_data_kit",
+    "configs/config.yaml",
+    "README.md",
+    "LICENSE",
+    "MANIFEST.in",
+]
+
+[tool.black]
+line-length = 100
+target-version = ["py38"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
