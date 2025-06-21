@@ -1,8 +1,24 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from endpoints import data_parser, augmentation
+import os
+import re
 
 app = FastAPI(title="LLM Garage Data Augmentation API")
+
+@app.on_event("startup")
+async def startup_event():
+    """
+    On startup, get the Gemini API key from environment variables
+    and update the config file.
+    """
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    if gemini_api_key:
+        print(f"Found Gemini API key. Updating config...")
+        # This path should be correct for the container environment where workdir is /app
+        update_api_key_in_config_file("synthetic-data-kit/synthetic_data_kit/config.yaml", gemini_api_key)
+    else:
+        print("GEMINI_API_KEY environment variable not set. Skipping config update.")
 
 origins = [
     "http://localhost:3000",  # your React app's origin
@@ -65,11 +81,3 @@ def update_api_key_in_config_file(config_path: str, new_api_key: str):
         print(f"Error: Configuration file not found at {config_path}")
     except Exception as e:
         print(f"An error occurred while updating the config file: {e}")
-
-if __name__ == "__main__":
-    import uvicorn
-    import os
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    print(f"Gemini API key: {GEMINI_API_KEY}")
-    update_api_key_in_config_file("synthetic-data-kit/synthetic_data_kit/config.yaml", GEMINI_API_KEY)
-    uvicorn.run(app, host="0.0.0.0", port=8000)

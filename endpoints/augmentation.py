@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import os
 import json
 from google.cloud import storage
+import re
 
 # The synthetic-data-kit is installed in the Docker container, so these imports will work there.
 from synthetic_data_kit.core.ingest import process_file as ingest_process_file # type: ignore
