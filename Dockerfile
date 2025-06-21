@@ -22,12 +22,14 @@ WORKDIR /app
 # Copy requirements first for better caching
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install -e synthetic-data-kit/
+
 #RUN huggingface-cli login --token ${HF_TOKEN}  
 
 
 # Copy the rest of the application
 COPY . .
+
+RUN pip install -e synthetic-data-kit/
 
 # Expose the port the app runs on
 EXPOSE 8080
