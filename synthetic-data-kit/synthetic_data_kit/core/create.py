@@ -71,7 +71,6 @@ def process_file(
         print(f"============= Processing {file_path} for QA generation =====================")
         document_text = read_json(file_path)
         print(f"Document text length: {len(document_text)} characters")
-        print(document_text)
         # Get num_pairs from args or config
         if num_pairs is None:
             config = client.config
