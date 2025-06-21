@@ -70,5 +70,6 @@ if __name__ == "__main__":
     import uvicorn
     import os
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    print(GEMINI_API_KEY)
     update_api_key_in_config_file("synthetic-data-kit/synthetic_data_kit/config.yaml", GEMINI_API_KEY)
     uvicorn.run(app, host="0.0.0.0", port=8000)
