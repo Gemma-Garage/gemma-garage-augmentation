@@ -4,6 +4,7 @@ import os
 import json
 from google.cloud import storage
 import re
+from starlette.concurrency import run_in_threadpool
 
 # The synthetic-data-kit is installed in the Docker container, so these imports will work there.
 from synthetic_data_kit.core.ingest import process_file as ingest_process_file # type: ignore
@@ -143,24 +144,26 @@ async def augment_data(request: AugmentationRequest):
         api_key = api_endpoint_config.get("api_key")
         print(f"API Key from config.yaml: {api_key}")
         # 2. Ingest and process the file to extract text
-        parsed_file_path = ingest_process_file(local_file_path, output_dir, output_name, ctx.config)
+        parsed_file_path = await run_in_threadpool(
+            ingest_process_file, local_file_path, output_dir, output_name, ctx.config
+        )
 
         # 3. Generate QA pairs from the processed text
         provider = get_llm_provider(ctx.config)
         api_endpoint_config = get_openai_config(ctx.config)
         api_base = api_endpoint_config.get("api_base")
         model = api_endpoint_config.get("model")
-        
-        qa_output_path = create_qa_process_file(
-            file_path=parsed_file_path,
-            output_dir=output_dir,
-            config_path=ctx.config_path,
-            api_base=api_base,
-            model=model,
-            content_type="qa",
-            num_pairs=10, # This could be a request parameter
-            verbose=True,
-            provider=provider
+        qa_output_path = await run_in_threadpool(
+            create_qa_process_file,
+            parsed_file_path,
+            output_dir,
+            ctx.config_path,
+            api_base,
+            model,
+            "qa",
+            10,  # num_pairs
+            True,  # verbose
+            provider
         )
 
         # 4. Upload generated QA pairs to GCS
