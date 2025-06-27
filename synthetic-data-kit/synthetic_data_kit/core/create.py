@@ -31,6 +31,7 @@ def process_file(
     num_pairs: Optional[int] = None,
     verbose: bool = False,
     provider: Optional[str] = None,
+    prompt: Optional[str] = None
 ) -> str:
     """Process a file to generate content
     
@@ -67,7 +68,7 @@ def process_file(
     
     # Generate content based on type
     if content_type == "qa":
-        generator = QAGenerator(client, config_path)
+        generator = QAGenerator(client, config_path, prompt)
         print(f"============= Processing {file_path} for QA generation =====================")
         document_text = read_json(file_path)
         print(f"Document text length: {len(document_text)} characters")

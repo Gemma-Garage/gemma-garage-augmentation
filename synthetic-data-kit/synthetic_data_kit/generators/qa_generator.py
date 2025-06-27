@@ -20,7 +20,8 @@ from synthetic_data_kit.utils.config import load_config, get_generation_config, 
 class QAGenerator:
     def __init__(self, 
                  client: LLMClient,
-                 config_path: Optional[Path] = None):
+                 config_path: Optional[Path] = None,
+                 prompt: Optional[str] = None):
         """Initialize the QA Generator with an LLM client and optional config"""
         self.client = client
         
@@ -30,6 +31,10 @@ class QAGenerator:
         # Get specific configurations
         self.generation_config = get_generation_config(self.config)
         self.curate_config = get_curate_config(self.config)
+
+        self.system_prompt = None
+        if prompt:
+            self.system_prompt = "Follow these instructions: " + prompt
     
     def generate_summary(self, document_text: str) -> str:
         """Generate a summary of the document"""
@@ -85,6 +90,8 @@ class QAGenerator:
         
         # Get QA generation prompt template
         qa_prompt_template = get_prompt(self.config, "qa_generation")
+        if self.system_prompt:
+            qa_prompt_template = self.system_prompt + "\n" + qa_prompt_template
         
         # Prepare all message batches
         all_messages = []

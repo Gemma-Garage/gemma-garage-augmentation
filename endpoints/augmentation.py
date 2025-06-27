@@ -16,6 +16,7 @@ router = APIRouter()
 
 class AugmentationRequest(BaseModel):
     file_name: str
+    prompt: str
     qa_pairs: int = 10  # Default to 10 for backward compatibility
 
 def update_api_key_in_config_file(config_path: str, new_api_key: str):
@@ -136,15 +137,12 @@ async def augment_data(request: AugmentationRequest):
     local_file_path = None
     qa_output_path = None
     try:
-        # 1. Download file from GCS
+        #Download file from GCS
         local_file_path = download_gcs_file(gcs_path, temp_dir)
         file_name = os.path.basename(local_file_path)
         output_name = os.path.splitext(file_name)[0]
-        # Print the api-key from the config.yaml file for debugging
-        api_endpoint_config = ctx.config.get("api-endpoint", {})
-        api_key = api_endpoint_config.get("api_key")
-        print(f"API Key from config.yaml: {api_key}")
-        # 2. Ingest and process the file to extract text
+
+        #Ingest and process the file to extract text
         parsed_file_path = await run_in_threadpool(
             ingest_process_file, local_file_path, output_dir, output_name, ctx.config
         )
@@ -164,7 +162,8 @@ async def augment_data(request: AugmentationRequest):
             "qa",
             request.qa_pairs,  # Use the value from the request
             True,  # verbose
-            provider
+            provider,
+            prompt=request.prompt  # Use the prompt from the request
         )
 
         # 4. Upload generated QA pairs to GCS
