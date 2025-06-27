@@ -16,6 +16,7 @@ router = APIRouter()
 
 class AugmentationRequest(BaseModel):
     file_name: str
+    qa_pairs: int = 10  # Default to 10 for backward compatibility
 
 def update_api_key_in_config_file(config_path: str, new_api_key: str):
     """
@@ -161,7 +162,7 @@ async def augment_data(request: AugmentationRequest):
             api_base,
             model,
             "qa",
-            10,  # num_pairs
+            request.qa_pairs,  # Use the value from the request
             True,  # verbose
             provider
         )
