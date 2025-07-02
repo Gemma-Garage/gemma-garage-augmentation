@@ -102,11 +102,21 @@ class QAGenerator:
                 summary=summary[:100],
                 text=chunk
             )
-            
+
+            # Instead of system, send as user message for Gemini compatibility
             messages = [
-                {"role": "system", "content": qa_prompt}
+                {"role": "user", "content": qa_prompt}
             ]
             all_messages.append(messages)
+
+            # Print the prompt being sent to the LLM for debugging
+            print(f"--- PROMPT FOR CHUNK {i+1} START ---")
+            print(qa_prompt[:2000] + ("..." if len(qa_prompt) > 2000 else ""))
+            print(f"--- PROMPT FOR CHUNK {i+1} END ---")
+            # Print the chunk content for debugging
+            print(f"--- CHUNK {i+1} CONTENT START ---")
+            print(chunk[:1000] + ("..." if len(chunk) > 1000 else ""))
+            print(f"--- CHUNK {i+1} CONTENT END ---")
         
         print(f"Processing {len(chunks)} chunks to generate QA pairs...")
         
