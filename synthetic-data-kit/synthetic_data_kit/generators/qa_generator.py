@@ -155,6 +155,10 @@ class QAGenerator:
                 # Process each response in the batch
                 for j, response in enumerate(batch_responses):
                     chunk_index = batch_start + j
+                    # Print the chunk content for debugging
+                    print(f"--- CHUNK {chunk_index+1} CONTENT START ---")
+                    print(chunks[chunk_index][:1000] + ("..." if len(chunks[chunk_index]) > 1000 else ""))
+                    print(f"--- CHUNK {chunk_index+1} CONTENT END ---")
                     chunk_pairs = parse_qa_pairs(response)
                     all_qa_pairs.extend(chunk_pairs)
                     
