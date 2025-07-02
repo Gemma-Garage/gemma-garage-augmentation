@@ -155,6 +155,10 @@ class QAGenerator:
                 # Process each response in the batch
                 for j, response in enumerate(batch_responses):
                     chunk_index = batch_start + j
+                    # Print the prompt being sent to the LLM for debugging
+                    print(f"--- PROMPT FOR CHUNK {chunk_index+1} START ---")
+                    print(qa_prompt[:2000] + ("..." if len(qa_prompt) > 2000 else ""))
+                    print(f"--- PROMPT FOR CHUNK {chunk_index+1} END ---")
                     # Print the chunk content for debugging
                     print(f"--- CHUNK {chunk_index+1} CONTENT START ---")
                     print(chunks[chunk_index][:1000] + ("..." if len(chunks[chunk_index]) > 1000 else ""))
