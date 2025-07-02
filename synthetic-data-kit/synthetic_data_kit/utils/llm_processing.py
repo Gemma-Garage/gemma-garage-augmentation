@@ -61,7 +61,9 @@ def parse_qa_pairs(text: str) -> List[Dict[str, str]]:
             print(f"Extracted {len(pairs)} QA pairs with regex")
         else:
             print("No QA pairs extracted. Check the model output format.")
-    
+            print("--- LLM OUTPUT START ---")
+            print(text[:1000] + ("..." if len(text) > 1000 else ""))
+            print("--- LLM OUTPUT END ---")
     return pairs
 
 def parse_ratings(text: str, original_items: List[Dict[str, str]] = None) -> List[Dict[str, Any]]:
