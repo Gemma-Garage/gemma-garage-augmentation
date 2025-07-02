@@ -165,17 +165,19 @@ class QAGenerator:
                 # Process each response in the batch
                 for j, response in enumerate(batch_responses):
                     chunk_index = batch_start + j
-                    # Print the prompt being sent to the LLM for debugging
-                    print(f"--- PROMPT FOR CHUNK {chunk_index+1} START ---")
-                    print(qa_prompt[:2000] + ("..." if len(qa_prompt) > 2000 else ""))
-                    print(f"--- PROMPT FOR CHUNK {chunk_index+1} END ---")
-                    # Print the chunk content for debugging
-                    print(f"--- CHUNK {chunk_index+1} CONTENT START ---")
-                    print(chunks[chunk_index][:1000] + ("..." if len(chunks[chunk_index]) > 1000 else ""))
-                    print(f"--- CHUNK {chunk_index+1} CONTENT END ---")
                     chunk_pairs = parse_qa_pairs(response)
                     all_qa_pairs.extend(chunk_pairs)
-                    
+
+                    # Only print debug info if the number of pairs is not as expected
+                    if len(chunk_pairs) != pairs_per_chunk:
+                        print(f"[QA DEBUG] Chunk {chunk_index+1}: Expected {pairs_per_chunk} pairs, got {len(chunk_pairs)}")
+                        print(f"--- PROMPT FOR CHUNK {chunk_index+1} START ---")
+                        print(qa_prompt[:2000] + ("..." if len(qa_prompt) > 2000 else ""))
+                        print(f"--- PROMPT FOR CHUNK {chunk_index+1} END ---")
+                        print(f"--- CHUNK {chunk_index+1} CONTENT START ---")
+                        print(chunks[chunk_index][:1000] + ("..." if len(chunks[chunk_index]) > 1000 else ""))
+                        print(f"--- CHUNK {chunk_index+1} CONTENT END ---")
+
                     if verbose:
                         print(f"  Generated {len(chunk_pairs)} pairs from chunk {chunk_index+1}")
                 
