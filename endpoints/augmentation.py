@@ -110,9 +110,8 @@ async def augment_data(request: AugmentationRequest):
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     config_path = os.path.join(base_dir, "synthetic-data-kit/synthetic_data_kit", "config.yaml")
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    
-    print(f"Gemini API key: {GEMINI_API_KEY}")
-    update_api_key_in_config_file(config_path, GEMINI_API_KEY)
+
+    print(f"Nbr of pairs: {request.qa_pairs}")
 
     ctx = AppContext()
 
@@ -160,9 +159,9 @@ async def augment_data(request: AugmentationRequest):
             api_base,
             model,
             "qa",
-            request.qa_pairs,  # Use the value from the request
-            True,  # verbose
-            provider,
+            num_pairs=request.qa_pairs,  # Use the value from the request
+            verbose=True,  # verbose
+            provider=provider,
             prompt=request.prompt  # Use the prompt from the request
         )
 
