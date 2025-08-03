@@ -166,7 +166,6 @@ def process_file(
         
     elif content_type == "cot-enhance":
         from synthetic_data_kit.generators.cot_generator import COTGenerator
-        import os
         
         # Disable tqdm's Jupyter widget mode in API environments to prevent display conflicts
         os.environ['TQDM_DISABLE'] = '1'
