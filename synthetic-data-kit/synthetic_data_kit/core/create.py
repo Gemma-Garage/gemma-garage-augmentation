@@ -166,6 +166,15 @@ def process_file(
         
     elif content_type == "cot-enhance":
         from synthetic_data_kit.generators.cot_generator import COTGenerator
+        import os
+        
+        # Disable tqdm's Jupyter widget mode in API environments to prevent display conflicts
+        os.environ['TQDM_DISABLE'] = '1'
+        
+        # Force tqdm to use text mode instead of notebook mode
+        import tqdm
+        tqdm.tqdm._instances.clear()  # Clear any existing instances
+        
         from tqdm import tqdm
         
         # Initialize the CoT generator
@@ -232,7 +241,10 @@ def process_file(
             # Process each conversation
             enhanced_conversations = []
             
-            for i, conversation in enumerate(tqdm(conversations, desc="Enhancing conversations")):
+            # Disable tqdm progress bar in API environments to prevent Jupyter display conflicts
+            disable_progress = os.getenv('API_MODE', '1') == '1'  # Default to disabled in API mode
+            
+            for i, conversation in enumerate(tqdm(conversations, desc="Enhancing conversations", disable=disable_progress)):
                 # Check if this item has a conversations field
                 if isinstance(conversation, dict) and "conversations" in conversation:
                     conv_messages = conversation["conversations"]
